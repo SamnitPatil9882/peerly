@@ -20,12 +20,12 @@ type Storer interface {
 	CreateUserBlacklistedToken(context.Context, UserBlacklistedToken) error
 
 	// Organizations
-	ListOrganizations(context.Context) ([]Organization, error)
-	GetOrganization(context.Context, int) (Organization, error)
-	CreateOrganization(context.Context, Organization) (Organization, error)
-	DeleteOrganization(context.Context, int) error
-	UpdateOrganization(context.Context, Organization, int) (Organization, error)
-	GetOrganizationByDomainName(context.Context, string) (Organization, error)
+	// ListOrganizations(context.Context) ([]Organization, error)
+	// GetOrganization(context.Context, int) (Organization, error)
+	// CreateOrganization(context.Context, Organization) (Organization, error)
+	// DeleteOrganization(context.Context, int) error
+	// UpdateOrganization(context.Context, Organization, int) (Organization, error)
+	// GetOrganizationByDomainName(context.Context, string) (Organization, error)
 
 	// Recognition
 	CreateRecognition(context.Context, Recognition) (Recognition, error)

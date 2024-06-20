@@ -58,7 +58,7 @@ func createRecognitionHandler(deps Dependencies) http.HandlerFunc {
 
 		// validate that given organization_id is present in database or not
 
-		_, err = deps.Store.GetOrganization(req.Context(), organizationID)
+		// _, err = deps.Store.GetOrganization(req.Context(), organizationID)
 		if err != nil {
 			logger.WithField("err", err.Error()).Error("Error while fetching given organization")
 			repsonse(rw, http.StatusBadRequest, errorResponse{

@@ -59,10 +59,10 @@ type User struct {
 }
 
 // Organization - retrieve the user's organization based on the OrgID property
-func (u *User) Organization(ctx context.Context, store Storer) (org Organization, err error) {
-	org, err = store.GetOrganization(ctx, u.OrgID)
-	return
-}
+// func (u *User) Organization(ctx context.Context, store Storer) (org Organization, err error) {
+// 	org, err = store.GetOrganization(ctx, u.OrgID)
+// 	return
+// }
 
 // Role - retrieve the user's role based on the RoleID property
 func (u *User) Role(ctx context.Context, store Storer) (role Role, err error) {

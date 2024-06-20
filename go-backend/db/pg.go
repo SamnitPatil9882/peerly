@@ -146,3 +146,7 @@ func getMigrationPath() string {
 func getDBConn() *sqlx.DB {
 	return pgStoreConn.db
 }
+
+func GetSqlInstance () *sqlx.DB {
+	return pgStoreConn.db
+}

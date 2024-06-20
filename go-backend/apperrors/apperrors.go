@@ -29,6 +29,11 @@ import (
 	"net/http"
 )
 
+type CustomError string
+
+func (e CustomError) Error() string {
+	return string(e)
+}
 // ErrorStruct - a generic struct you can use to create error messages/logs to be converted
 // to JSON or other types of messages/data as you need it
 type ErrorStruct struct {
@@ -115,3 +120,66 @@ var ErrFailedToCreate = errors.New("Failed to create database record")
 
 // ErrUnknown - Used when an unknown/unexpected error has ocurred. Try to avoid over-using this.
 var ErrUnknown = errors.New("unknown/unexpected error has occurred")
+
+//common
+const (
+	BadRequest = CustomError("Bad request")
+	UnauthorizedAccess = CustomError("Unauthorized access")
+	InvalidId = CustomError("Invalid id")
+	InernalServer = CustomError("Failed to write organization db")
+	JSONParsingErrorReq = CustomError("error in parsing request in json")
+	JSONParsingErrorResp = CustomError("error in parsing response in json")
+	OutOfRange = CustomError("request value is out of range")
+	OrganizationNotFound = CustomError("organization  not found")
+	InvalidContactEmail = CustomError("Contact email is already present")
+	InvalidDomainName = CustomError("Domain name is already present")
+	InvalidReferenceId = CustomError("Invalid reference id")
+	AttemptExceeded = CustomError(" 3 attempts exceeded ")
+	InvalidOTP  = CustomError("invalid otp")
+	TimeExceeded = CustomError("time exceeded")
+	ErrOTPAlreadyExists = CustomError("otp already exists")
+	ErrOTPAttemptsExceeded = CustomError("attempts exceeded for organization")
+)
+
+//organization
+
+
+
+
+
+//helper functions
+func ErrorResp(rw http.ResponseWriter, err error) {
+	// Create the ErrorStruct object for later use
+	statusCode := GetHTTPStatusCode(err)
+	errObj := ErrorStruct{
+		Message: err.Error(),
+		Status:  statusCode,
+	}
+
+	errJSON, err := json.Marshal(&errObj)
+	if err != nil {
+		log.Warn(err, "Error in AppErrors marshalling JSON", err)
+	}
+	rw.WriteHeader(statusCode)
+	rw.Header().Add("Content-Type", "application/json")
+	rw.Write(errJSON)
+}
+
+func GetHTTPStatusCode(err error) int {
+	switch err {
+	case InernalServer,JSONParsingErrorResp:
+		return http.StatusInternalServerError
+	case OrganizationNotFound,InvalidReferenceId:
+		return http.StatusNotFound
+	case InvalidId,JSONParsingErrorReq:
+		return http.StatusBadRequest
+	case InvalidContactEmail,InvalidDomainName:
+		return http.StatusConflict
+	case TimeExceeded,InvalidOTP:
+		return http.StatusGone
+	case AttemptExceeded:
+		return http.StatusTooManyRequests
+	default:
+		return http.StatusInternalServerError
+	}
+}
